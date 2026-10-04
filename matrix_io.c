@@ -16,7 +16,7 @@ double f(int k, int n, int i, int j) {  //вычисляет каждый эл �
         case 2:
             return (double)(i > j ? i : j); //double - преобр типа
         case 3:
-            return (double)abs(i - j);
+            return (double)( i>j ? (i-j):(j-i));
         case 4:
             return 1.0 / (double)(i + j - 1);
         default:
@@ -25,21 +25,23 @@ double f(int k, int n, int i, int j) {  //вычисляет каждый эл �
 }
 
 void matr_form(double *a, int n, int k) {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
+    int i, j;
+    for ( i = 0; i < n; i++) {
+        for ( j = 0; j < n; j++) {
             a[i * n + j] = f(k, n, i + 1, j + 1);
         }
     }
 }
 
 int matr_file(double *a, int n, const char *file) {
+    int i, j;
     FILE *fp = fopen(file, "r");
     if (!fp) {
         return -1;
     }
 
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
+    for ( i = 0; i < n; i++) {
+        for ( j = 0; j < n; j++) {
             if (fscanf(fp, "%lf", &a[i * n + j]) != 1) {
                 fclose(fp);
                 return -2;
@@ -52,20 +54,23 @@ int matr_file(double *a, int n, const char *file) {
 }
 
 void init_rhs(const double *a, double *b, int n) {
-    for (int i = 0; i < n; i++) {
+    int i, j;
+    for ( i = 0; i < n; i++) {
         b[i] = 0.0;
-        for (int j = 0; j < n; j += 2) {
+        for ( j = 0; j < n; j += 2) {
             b[i] += a[i * n + j];
         }
     }
 }
 
 void print_matrix(const double *a, int l, int n, int m) {
-    int am_rows = (l < m) ? l : m;
-    int am_cols = (n < m) ? n : m;
+    int am_rows, i, j;
+    int am_cols;
+     am_rows = (l < m) ? l : m;
+     am_cols = (n < m) ? n : m;
 
-    for (int i = 0; i < am_rows; i++) {
-        for (int j = 0; j < am_cols; j++) {
+    for ( i = 0; i < am_rows; i++) {
+        for ( j = 0; j < am_cols; j++) {
             printf(" %10.3e", a[i * n + j]);
         }
         printf("\n");
